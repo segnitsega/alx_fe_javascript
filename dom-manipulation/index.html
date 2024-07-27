@@ -22,10 +22,9 @@
         }
         #syncStatus {
             margin-top: 20px;
-            font-size: 1.2em;
-            color: green;
+            font-weight: bold;
         }
-        #syncStatus.error {
+        .error {
             color: red;
         }
     </style>
@@ -40,11 +39,11 @@
         <button id="addQuoteButton">Add Quote</button>
         <button id="exportQuotes">Export Quotes</button>
         <input type="file" id="importFile" accept=".json" />
-        <select id="categoryFilter" onchange="filterQuotes()">
-            <option value="all">All Categories</option>
-            <!-- Dynamically populated categories -->
-        </select>
     </div>
+    <select id="categoryFilter" onchange="filterQuotes()">
+        <option value="all">All Categories</option>
+        <!-- Dynamically populated categories -->
+    </select>
     <div id="syncStatus"></div>
     <script src="script.js"></script>
 </body>

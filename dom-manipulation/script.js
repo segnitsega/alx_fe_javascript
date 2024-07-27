@@ -138,7 +138,9 @@ async function syncQuotes() {
                 saveQuotes();
                 showRandomQuote();
                 updateCategoryFilter(); // Update category filter with server data
-                displaySyncStatus('Data updated from server.');
+                displaySyncStatus('Quotes synced with server!');
+            } else {
+                displaySyncStatus('No updates from server.');
             }
 
             await postQuotesToServer(); // Post local changes to the server
@@ -194,8 +196,4 @@ document.body.addEventListener('click', function(event) {
 document.getElementById('importFile').addEventListener('change', importFromJsonFile);
 
 // Event listener for category filter
-document.getElementById('categoryFilter').addEventListener('change', filterQuotes);
-
-// Create the add quote form and initialize category filter
-createAddQuoteForm();
-populateCategoryFilter();
+document
