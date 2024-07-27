@@ -10,7 +10,7 @@ const serverUrl = 'https://jsonplaceholder.typicode.com/posts'; // Simulated ser
 document.addEventListener('DOMContentLoaded', () => {
     showRandomQuote(); // Show a random quote on page load
     populateCategoryFilter(); // Populate category filter on page load
-    syncWithServer(); // Start periodic syncing with server
+    syncQuotes(); // Start periodic syncing with server
 });
 
 // Function to display a random quote
@@ -99,26 +99,52 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
 }
 
-// Function to sync with server
-function syncWithServer() {
+// Function to fetch quotes from the server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(serverUrl);
+        const serverData = await response.json();
+        return serverData.map(item => ({ text: item.title, category: item.body }));
+    } catch (error) {
+        displaySyncStatus('Error fetching data from server.', true);
+        return [];
+    }
+}
+
+// Function to post local quotes to the server
+async function postQuotesToServer() {
+    try {
+        await fetch(serverUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quotes)
+        });
+    } catch (error) {
+        displaySyncStatus('Error posting data to server.', true);
+    }
+}
+
+// Function to sync quotes with server
+async function syncQuotes() {
     setInterval(async () => {
         try {
-            const response = await fetch(serverUrl);
-            const serverData = await response.json();
+            const serverQuotes = await fetchQuotesFromServer();
 
-            // Assume serverData is in the format [{text: ..., category: ...}]
-            const serverQuotes = serverData.map(item => ({ text: item.title, category: item.body }));
-            
-            // Simple conflict resolution: server data takes precedence
             if (JSON.stringify(quotes) !== JSON.stringify(serverQuotes)) {
+                // Basic conflict resolution: server data takes precedence
                 quotes = serverQuotes;
                 saveQuotes();
                 showRandomQuote();
                 updateCategoryFilter(); // Update category filter with server data
                 displaySyncStatus('Data updated from server.');
             }
+
+            await postQuotesToServer(); // Post local changes to the server
+
         } catch (error) {
-            displaySyncStatus('Error syncing with server.', true);
+            displaySyncStatus('Sync error.', true);
         }
     }, 60000); // Sync every minute
 }
