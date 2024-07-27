@@ -13,27 +13,26 @@ function showRandomQuote() {
     quoteDisplay.innerHTML = `<p>"${quote.text}" - <em>${quote.category}</em></p>`;
 }
 
-// Function to create the form to add new quotes
-function createAddQuoteForm() {
-    const formHtml = `
-        <div>
-            <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-            <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-            <button id="addQuoteButton">Add Quote</button>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', formHtml);
-}
-
-// Function to add a new quote
+// Function to add a new quote and update the DOM
 function addQuote() {
     const newQuoteText = document.getElementById('newQuoteText').value;
     const newQuoteCategory = document.getElementById('newQuoteCategory').value;
 
     if (newQuoteText && newQuoteCategory) {
+        // Add the new quote to the quotes array
         quotes.push({ text: newQuoteText, category: newQuoteCategory });
+
+        // Clear the input fields
         document.getElementById('newQuoteText').value = '';
         document.getElementById('newQuoteCategory').value = '';
+
+        // Create new DOM elements for the new quote
+        const newQuoteElement = document.createElement('p');
+        newQuoteElement.innerHTML = `"${newQuoteText}" - <em>${newQuoteCategory}</em>`;
+
+        // Append the new quote to the quote display
+        document.getElementById('quoteDisplay').appendChild(newQuoteElement);
+
         alert('Quote added successfully!');
     } else {
         alert('Please enter both quote text and category.');
@@ -44,11 +43,4 @@ function addQuote() {
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 
 // Event listener for the 'Add Quote' button
-document.body.addEventListener('click', function(event) {
-    if (event.target && event.target.id === 'addQuoteButton') {
-        addQuote();
-    }
-});
-
-// Create the add quote form
-createAddQuoteForm();
+document.getElementById('addQuoteButton').addEventListener('click', addQuote);
