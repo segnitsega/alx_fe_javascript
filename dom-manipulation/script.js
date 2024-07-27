@@ -1,9 +1,14 @@
-// Initial array of quotes
+// Initial array of quotes, loading from local storage if available
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", category: "Inspirational" },
     { text: "The way to get started is to quit talking and begin doing.", category: "Motivational" },
     { text: "Your time is limited, so don't waste it living someone else's life.", category: "Life" },
 ];
+
+// Load quotes from local storage on page load
+document.addEventListener('DOMContentLoaded', () => {
+    showRandomQuote(); // Show a random quote on page load
+});
 
 // Function to display a random quote
 function showRandomQuote() {
@@ -16,46 +21,38 @@ function showRandomQuote() {
 
 // Function to create the form to add new quotes
 function createAddQuoteForm() {
-    // Create a container div
     const formDiv = document.createElement('div');
     formDiv.classList.add('quote-form');
     
-    // Create the quote text input
     const quoteInput = document.createElement('input');
     quoteInput.id = 'newQuoteText';
     quoteInput.type = 'text';
     quoteInput.placeholder = 'Enter a new quote';
     
-    // Create the quote category input
     const categoryInput = document.createElement('input');
     categoryInput.id = 'newQuoteCategory';
     categoryInput.type = 'text';
     categoryInput.placeholder = 'Enter quote category';
     
-    // Create the add quote button
     const addButton = document.createElement('button');
     addButton.id = 'addQuoteButton';
     addButton.textContent = 'Add Quote';
     
-    // Create export button
     const exportButton = document.createElement('button');
     exportButton.id = 'exportQuotes';
     exportButton.textContent = 'Export Quotes';
-
-    // Create import file input
+    
     const importInput = document.createElement('input');
     importInput.id = 'importFile';
     importInput.type = 'file';
     importInput.accept = '.json';
-
-    // Append inputs and button to the form div
+    
     formDiv.appendChild(quoteInput);
     formDiv.appendChild(categoryInput);
     formDiv.appendChild(addButton);
     formDiv.appendChild(exportButton);
     formDiv.appendChild(importInput);
     
-    // Append the form div to the body
     document.body.appendChild(formDiv);
 }
 
